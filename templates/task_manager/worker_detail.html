@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>{{ worker.username }}'s Details</title>
+{% endblock %}
+
+{% block content %}
+	<h1>{{ worker.first_name }} {{ worker.last_name }}</h1>
+  <p>Username: {{ worker.username }}</p>
+  <p>Email: {{ worker.email }}</p>
+  <p>Position: {{ worker.position.name }}</p>
+
+  <h2>Assigned Tasks</h2>
+  {% if tasks %}
+    <ul>
+      {% for task in tasks %}
+        <li>
+          <strong>{{ task.name }}</strong> - {{ task.description }} (Deadline: {{ task.deadline }})
+          {% if task.is_completed %}
+            <span class="text-success">Completed</span>
+          {% else %}
+            <span class="text-danger">Not Completed</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tasks assigned.</p>
+  {% endif %}
+
+	{% if request.user is worker %}
+		<a href="{% url 'task-manager:worker-update' request.user.id %}">Update Profile</a>
+		<a href="{% url 'task-manager:worker-update' request.user.id %}">Delete Profile</a>
+	{% endif %}
+{% endblock %}

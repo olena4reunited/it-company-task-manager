@@ -97,3 +97,14 @@ class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = 'task_manager/worker_update_form.html'
     success_url = reverse_lazy('task-manager:worker-list')
 
+
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Worker
+    template_name = 'task_manager/worker_detail.html'
+    context_object_name = 'worker'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tasks'] = Task.objects.prefetch_related('assignees').filter(assignees_contains=self.object)
+        return context
+
