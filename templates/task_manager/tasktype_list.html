@@ -12,13 +12,17 @@
 				<tr>
 					<th scope="col">ID</th>
 					<th scope="col">Name</th>
+					<th scope="col">Update</th>
+					<th scope="col">Delete</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for task_type in tasktype_list %}
 				<tr>
-					<td><a href="#">{{ task_type.id }}</a></td>
+					<td><a href="{% url 'task-manager:task-type-detail' task_type.id %}">{{ task_type.id }}</a></td>
 					<td>{{ task_type.name }}</td>
+					<td><a href="#">Update</a></td>
+					<td><a href="#">Delete</a></td>
 				</tr>
 				{% empty %}
 				<tr>

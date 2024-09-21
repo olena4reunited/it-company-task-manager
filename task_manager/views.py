@@ -120,3 +120,12 @@ class TaskTypeListView(generic.ListView):
     template_name = 'task_manager/tasktype_list.html'
     context_object_name = 'tasktype_list'
 
+
+class TaskTypeDetailView(generic.DetailView):
+    model = TaskType
+    template_name = 'task_manager/tasktype_detail.html'
+    context_object_name = 'task'
+    
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('task_set')
+

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>{{ tasktype.name }}</title>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ tasktype.name }}</h1>
+    <p><strong>ID:</strong> {{ tasktype.id }}</p>
+    
+    <h2>Related Tasks</h2>
+    <ul>
+        {% for task in tasktype.task_set.all %}
+            <li>
+                <a href="{% url 'task-manager:task-detail' task.pk %}">{{ task.name }}</a>
+            </li>
+        {% empty %}
+            <li>No tasks associated with this task type.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'task-manager:tasktype-list' %}" class="btn btn-secondary">Back to Task Type List</a>
+{% endblock %}
