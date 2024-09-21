@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+	<title>Colleagues</title>
+{% endblock %}
+
+{% block content %}
+	<div class="table-responsive">
+		<div><a href="#">Create Task</a></div>
+		<table class="table table-hover table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Position</th>
+					<th scope="col">First name</th>
+					<th scope="col">Last name</th>
+					<th scope="col">Usernane</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for worker in worker_list %}
+				<tr>
+					<td><a href="#">{{ worker.id }}</a></td>
+					<td>{{ worker.position.name }}</td>
+					<td>{{ worker.first_name }}</td>
+					<td>{{ worker.last_name }}</td>
+					<td>{{ worker.username }} {% if user is request.user %}(ME){% endif %}</td>
+				</tr>
+				{% empty %}
+				<tr>
+					<td colspan="5" class="text-center">Nobody is working anymore</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
