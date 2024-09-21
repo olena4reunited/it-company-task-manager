@@ -52,3 +52,6 @@ class Task(models.Model):
         settings.AUTH_USER_MODEL,
         related_name="tasks"
     )
+
+    class Meta:
+        ordering = ["-deadline"]

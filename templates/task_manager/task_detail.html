@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-	<title>{{ task.task_type }}: {{ task.name }} </title>
+	<title>{{ task.task_type.name }}: {{ task.name }} </title>
 {% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
     <div class="card bg-light">
       <div class="card-header">
         <h3>
-          {{ task.task_type }}
+          {{ task.name }}
           <span class="text-danger">
             {{ task.deadline }}
           </span>
@@ -29,7 +29,7 @@
       </div>
       <div class="card-body">
         <div class="card-title">
-          <h4>{{ task.name }}</h4>
+          <h4>{{ task.task_type.name }}</h4>
         </div>
         <div class="card-text">
           <strong>Description:</strong> {{ task.description }}

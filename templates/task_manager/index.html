@@ -20,7 +20,7 @@
 			<tbody>
 				{% for task in tasks %}
 				<tr>
-					<td>{{ task.category }}</td>
+					<td>{{ task.task_type.name }}</td>
 					<td><a href="#">{{ task.name }}</a></td>
 					<td>{{ task.assignees }}</td>
 					<td>{{ task.priority }}</td>
