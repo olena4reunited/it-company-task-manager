@@ -18,7 +18,7 @@
                class="btn btn-danger">
               Delete
             </a>
-          {% if not task.is_completed %}
+          {% if request.user in task.created_by %}
             <a style="float:right"
                href="{% url "task-manager:task-update" pk=task.id %}"
                class="btn btn-primary mr-3">
@@ -42,8 +42,8 @@
       </div>
     </div>
 
-    {% if not task.is_completed %}
-      <a href="#"
+    {% if not task.is_completed and request.user in task.assignees %}
+      <a href="{% url 'task-manager:task-set-completed' pk=task.id %}"
          class="btn btn-success mt-3">
         Mark as Done
       </a>

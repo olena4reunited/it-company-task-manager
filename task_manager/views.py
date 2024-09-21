@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -33,6 +34,16 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
     queryset = Task.objects.prefetch_related("assignees", "task_type")
+
+
+@login_required
+def task_set_completed(request: HttpRequest, pk: int) -> HttpResponse:
+    task = Task.objects.get(pk=pk)
+
+    task.is_completed = True
+    task.save()
+
+    return redirect(reverse_lazy("task_manager:tasks"))
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
