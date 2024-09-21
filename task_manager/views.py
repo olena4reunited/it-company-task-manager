@@ -7,10 +7,11 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from task_manager.forms import TaskForm
+from task_manager.forms import TaskForm, WorkerCreationForm
 from task_manager.models import Task, Worker
 
 
+@login_required()
 def index(request: HttpRequest) -> HttpResponse:
     tasks = Task.objects.filter(is_completed=False).select_related("task_type").prefetch_related("assignees")
 
@@ -79,3 +80,12 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return get_user_model().objects.select_related("position").all()
+
+
+class WorkerCreateView(generic.CreateView):
+    form_class = WorkerCreationForm
+    template_name = 'task_manager/worker_form.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        return super().form_valid(form)

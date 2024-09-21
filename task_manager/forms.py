@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 from task_manager.models import Worker, Task
 
@@ -22,3 +23,10 @@ class TaskForm(forms.ModelForm):
         if commit:
             task.save()
         return task
+
+
+class WorkerCreationForm(UserCreationForm):
+    class Meta:
+        model = Worker
+        fields = ['username', 'first_name', 'last_name', 'email', 'position', 'password1', 'password2']
+
