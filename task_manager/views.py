@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from task_manager.forms import TaskForm, WorkerCreationForm
+from task_manager.forms import TaskForm, WorkerCreationForm, WorkerUpdateForm
 from task_manager.models import Task, Worker
 
 
@@ -89,3 +89,11 @@ class WorkerCreateView(generic.CreateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerUpdateForm
+    template_name = 'task_manager/worker_update_form.html'
+    success_url = reverse_lazy('task-manager:worker-list')
+
