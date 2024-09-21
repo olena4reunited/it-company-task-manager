@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from task_manager.forms import TaskForm
@@ -28,7 +28,13 @@ def index(request: HttpRequest) -> HttpResponse:
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
-    success_url = reverse_lazy("task_manager:index")
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('task-manager:task-detail', args=[self.object.pk])
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):

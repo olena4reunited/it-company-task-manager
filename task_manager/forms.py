@@ -14,3 +14,11 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ["name", "description", "deadline", "task_type", "assignees"]
+
+    def save(self, commit=True, user=None):
+        task = super().save(commit=False)
+        if user is not None:
+            task.created_by = user
+        if commit:
+            task.save()
+        return task
