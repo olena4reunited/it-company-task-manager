@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Categories</title>
+{% endblock %}
+
+{% block content %}
+	<h1>Categories</h1>
+	<div class="table-responsive">
+		<table class="table table-hover table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for task_type in tasktype_list %}
+				<tr>
+					<td><a href="#">{{ task_type.id }}</a></td>
+					<td>{{ task_type.name }}</td>
+				</tr>
+				{% empty %}
+				<tr>
+					<td colspan="2" class="text-center">No task types available.</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+    </div>
+{% endblock %}

@@ -8,7 +8,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from task_manager.forms import TaskForm, WorkerCreationForm, WorkerUpdateForm
-from task_manager.models import Task, Worker
+from task_manager.models import Task, Worker, TaskType
 
 
 @login_required()
@@ -113,4 +113,10 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Worker
     template_name = 'task_manager/worker_confirm_delete.html'
     success_url = reverse_lazy('task-manager:workers-list')
+
+
+class TaskTypeListView(generic.ListView):
+    model = TaskType
+    template_name = 'task_manager/tasktype_list.html'
+    context_object_name = 'tasktype_list'
 

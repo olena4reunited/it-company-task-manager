@@ -1,7 +1,8 @@
 from django.urls import path
 
 from task_manager.views import index, TaskCreateView, TaskUpdateView, TaskDetailView, TaskDeleteView, TaskListView, \
-    WorkersListView, task_set_completed, WorkerCreateView, WorkerUpdateView, WorkerDetailView, WorkerDeleteView
+    WorkersListView, task_set_completed, WorkerCreateView, WorkerUpdateView, WorkerDetailView, WorkerDeleteView, \
+    TaskTypeListView
 
 urlpatterns = [
     path("", index, name="index"),
@@ -16,6 +17,7 @@ urlpatterns = [
     path("workers/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"),
     path("workers/<int:pk>/update/", WorkerUpdateView.as_view(), name="worker-update"),
     path("workers/<int:pk>/delete/", WorkerDeleteView.as_view(), name="worker-delete"),
+    path("tasktypes/", TaskTypeListView.as_view(), name="task-type-list"),
 ]
 
 app_name = "task-manager"
