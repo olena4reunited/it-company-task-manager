@@ -30,6 +30,6 @@
 
 	{% if request.user is worker %}
 		<a href="{% url 'task-manager:worker-update' request.user.id %}">Update Profile</a>
-		<a href="{% url 'task-manager:worker-update' request.user.id %}">Delete Profile</a>
+		<a href="{% url 'task-manager:worker-delete' request.user.id %}">Delete Profile</a>
 	{% endif %}
 {% endblock %}
