@@ -4,10 +4,13 @@
 			<a class="nav-link text-light" href="{% url 'task-manager:index' %}">Dashboard</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link text-light" href="#">My Tasks</a>
+			<a class="nav-link text-light" href="{% url 'task-manager:user-tasks' %}">My Tasks</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link text-light" href="#">Colleagues</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link text-light" href="#">Categories</a>
 		</li>
 </ul>
 </nav>

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -14,27 +15,35 @@ def index(request: HttpRequest) -> HttpResponse:
         tasks: tasks,
     }
 
-    return render(request=request, template_name="task_manager/index.html", context=context)
+    return render(request, template_name="task_manager/index.html", context=context)
 
 
-class TaskCreateView(generic.CreateView):
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
     success_url = reverse_lazy("task_manager:index")
 
 
-class TaskDetailView(generic.DetailView):
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
     queryset = Task.objects.prefetch_related("assignees", "task_type")
 
 
-class TaskUpdateView(generic.UpdateView):
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
     success_url = reverse_lazy("task_manager:index")
 
 
-class TaskDeleteView(generic.DeleteView):
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("task_manager:index")
+
+
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    template_name = "task_manager/user_task_list.html"
+
+    def get_queryset(self):
+        return Task.objects.filter(is_completed=False).prefetch_related("assignees", "task_type").filter(assignees__contains=self.request.user)
 

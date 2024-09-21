@@ -20,9 +20,14 @@
             </a>
           {% if not task.is_completed %}
             <a style="float:right"
-               href="{% url "task_manager:update-task" pk=task.id %}"
+               href="{% url "task-manager:task-update" pk=task.id %}"
                class="btn btn-primary mr-3">
               Update
+            </a>
+						<a style="float:right"
+               href="{% url "task-manager:task-delete" pk=task.id %}"
+               class="btn btn-primary mr-3">
+              Delete
             </a>
           {% endif %}
         </h3>
