@@ -23,6 +23,11 @@ class TaskCreateView(generic.CreateView):
     success_url = reverse_lazy("task_manager:index")
 
 
+class TaskDetailView(generic.DetailView):
+    model = Task
+    queryset = Task.objects.prefetch_related("assignees", "task_type")
+
+
 class TaskUpdateView(generic.UpdateView):
     model = Task
     form_class = TaskForm
