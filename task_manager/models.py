@@ -45,7 +45,8 @@ class Task(models.Model):
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=SET_NULL
+        on_delete=SET_NULL,
+        null=True
     )
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
