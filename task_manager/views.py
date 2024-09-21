@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from task_manager.forms import TaskForm, WorkerCreationForm, WorkerUpdateForm
+from task_manager.forms import TaskForm, WorkerCreationForm, WorkerUpdateForm, TaskTypeForm
 from task_manager.models import Task, Worker, TaskType
 
 
@@ -129,3 +129,17 @@ class TaskTypeDetailView(generic.DetailView):
     def get_queryset(self):
         return super().get_queryset().prefetch_related('task_set')
 
+
+class TaskTypeUpdateView(generic.UpdateView):
+    model = TaskType
+    form_class = TaskTypeForm
+    template_name = 'task_manager/tasktype_update.html'
+    context_object_name = 'tasktype'
+    success_url = reverse_lazy('task-manager:tasktype-list')
+
+
+class TaskTypeDeleteView(generic.DeleteView):
+    model = TaskType
+    template_name = 'task_manager/tasktype_confirm_delete.html'
+    context_object_name = 'tasktype'
+    success_url = reverse_lazy('task-manager:tasktype-list')
