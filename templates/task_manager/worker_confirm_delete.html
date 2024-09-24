@@ -5,11 +5,21 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Are you sure you want to delete {{ worker.username }}?</h1>
-    <p>This action cannot be undone.</p>
-    <form method="post">
-        {% csrf_token %}
-        <input type="submit" value="Confirm Deletion" class="btn btn-danger">
-        <a href="{% url 'task-manager:worker-detail' worker.id %}" class="btn btn-secondary">Cancel</a>
-    </form>
+<div class="container my-5">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card shadow-sm">
+				<div class="card-body p-4 text-center">
+					<h1 class="h5 mb-4 fw-bold">Confirm Deletion</h1>
+					<p class="mb-4">Are you sure you want to delete <strong>{{ worker.username }}</strong>? This action cannot be undone.</p>
+					<form method="post">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-danger">Confirm Deletion</button>
+						<a href="{% url 'task-manager:worker-detail' worker.id %}" class="btn btn-secondary">Cancel</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
