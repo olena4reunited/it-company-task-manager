@@ -1,17 +1,16 @@
-<header class="row bg-light py-3 px-4 align-items-center">
-	<div class="col">
-			<h1 class="h4">DevFlow</h1>
-	</div>
-	<div class="col text-end">
-		{% if user.is_authenticated %}
-			<a href="{% url 'task-manager:worker-create' %}" class="btn btn-outline-secondary me-2" aria-label="Register New User">Register New User</a>
-		
-			<form action="{% url 'logout' %}" method="post" style="display:inline;">
-				{% csrf_token %}
-				<button type="submit" class="btn btn-link" aria-label="Logout">Logout</button>
-			</form>
-		{% else %}
-			<a href="{% url 'login' %}" class="btn btn-outline-primary me-2" aria-label="Login">Login</a>
-		{% endif %}
-	</div>
+<header class="row bg-light py-3 px-4 align-items-center shadow">
+    <div class="col">
+        <h1 class="h4 mb-0">DevFlow</h1>
+    </div>
+    <div class="col text-end">
+        {% if user.is_authenticated %}
+            <a href="{% url 'task-manager:worker-create' %}" class="btn btn-outline-secondary me-2" aria-label="Register New User">Register New User</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger" aria-label="Logout">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary me-2" aria-label="Login">Login</a>
+        {% endif %}
+    </div>
 </header>

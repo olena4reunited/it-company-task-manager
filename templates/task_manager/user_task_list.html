@@ -5,36 +5,50 @@
 {% endblock %}
 
 {% block content %}
-	<div>
-		{{ user.first_name }} {{ user.last_name }}
-	</div>
-	<div class="table-responsive">
-		<div><a href="{% url 'task-manager:task-create' %}">Create Task</a></div>
-		<table class="table table-hover table-bordered">
-			<thead class="table-dark">
-				<tr>
-					<th scope="col">Category</th>
-					<th scope="col">Task Name</th>
-					<th scope="col">Assigned To</th>
-					<th scope="col">Priority</th>
-					<th scope="col">Deadline</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for task in tasks %}
-				<tr>
-					<td>{{ task.task_type.name }}</td>
-					<td><a href="{% url 'task-manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
-					<td>{{ task.assignees.all|join:", " }}</td>
-					<td>{{ task.priority }}</td>
-					<td>{{ task.deadline|date:"Y-m-d" }}</td>
-				</tr>
-				{% empty %}
-				<tr>
-					<td colspan="5" class="text-center">No tasks available</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+	<div class="container my-4">
+		<h1 class="text-center mb-4">{{ user.first_name }} {{ user.last_name }}'s Task List</h1>
+		<div class="text-end mb-3">
+			<a href="{% url 'task-manager:task-create' %}" class="btn btn-success">Create Task</a>
+		</div>
+		<div class="row">
+			{% for task in tasks %}
+				<div class="col-md-4 mb-4">
+					<div class="card shadow-sm">
+						<div class="card-header d-flex justify-content-between align-items-center">
+							<h5 class="mb-0">{{ task.name }}</h5>
+							<span class="badge bg-danger">{{ task.deadline }}</span>
+						</div>
+						<div class="card-body">
+							<h6 class="card-title">{{ task.task_type.name }}</h6>
+							<div class="d-flex justify-content-between">
+								<a href="{% url 'task-manager:task-detail' pk=task.id %}" class="btn btn-info">Detail</a>
+								{% if request.user == task.created_by %}
+									<div>
+										<a href="{% url 'task-manager:task-update' pk=task.id %}" class="btn btn-primary me-2">Update</a>
+										<a href="{% url 'task-manager:task-delete' pk=task.id %}" class="btn btn-danger">Delete</a>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 {% endblock %}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border: none;
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .badge {
+        font-size: 0.85rem;
+    }
+</style>
