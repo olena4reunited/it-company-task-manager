@@ -10,17 +10,15 @@
 		<table class="table table-hover table-bordered">
 			<thead class="table-dark">
 				<tr>
-					<th scope="col">ID</th>
 					<th scope="col">Name</th>
 					<th scope="col">Update</th>
 					<th scope="col">Delete</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for task_type in tasktype_list %}
+				{% for task_type in task_type_list %}
 				<tr>
-					<td><a href="{% url 'task-manager:task-type-detail' task_type.id %}">{{ task_type.id }}</a></td>
-					<td>{{ task_type.name }}</td>
+					<td><a href="{% url 'task-manager:task-type-detail' task_type.id %}">{{ task_type.name }}</a></td>
 					<td><a href="{% url 'task-manager:task-type-update' task_type.id %}">Update</a></td>
 					<td><a href="{% url 'task-manager:task-type-delete' task_type.id %}">Delete</a></td>
 				</tr>

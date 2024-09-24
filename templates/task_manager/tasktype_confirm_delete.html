@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block content %}
-	<h1>Delete Task Type: {{ tasktype.name }}</h1>
+	<h1>Delete Task Type: {{ task_type.name }}</h1>
 	<p>Are you sure you want to delete this task type?</p>
 	<form action="" method="post">
 		{% csrf_token %}
 		<input type="submit" value="Confirm Delete" class="btn btn-danger">
 	</form>
-	<a href="{% url 'task-manager:tasktype-list' %}" class="btn btn-secondary">Cancel</a>
+	<a href="{% url 'task-manager:task-type-list' %}" class="btn btn-secondary">Cancel</a>
 {% endblock %}

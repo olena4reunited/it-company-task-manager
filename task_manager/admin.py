@@ -22,6 +22,13 @@ class WorkerAdmin(UserAdmin):
     list_display = ('id', 'username', 'first_name', 'last_name', 'position')
     search_fields = ('username', 'first_name', 'last_name')
     ordering = ('username',)
+    fieldsets = UserAdmin.fieldsets + (
+        ("Additional info", {
+            "fields": (
+                "position",
+            )
+        }),
+    )
 
 
 @admin.register(Task)

@@ -9,7 +9,7 @@
 		{{ user.first_name }} {{ user.last_name }}
 	</div>
 	<div class="table-responsive">
-		<div><a href="#">Create Task</a></div>
+		<div><a href="{% url 'task-manager:task-create' %}">Create Task</a></div>
 		<table class="table table-hover table-bordered">
 			<thead class="table-dark">
 				<tr>
@@ -25,7 +25,7 @@
 				<tr>
 					<td>{{ task.task_type.name }}</td>
 					<td><a href="{% url 'task-manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
-					<td>{{ task.assignees }}</td>
+					<td>{{ task.assignees.all|join:", " }}</td>
 					<td>{{ task.priority }}</td>
 					<td>{{ task.deadline|date:"Y-m-d" }}</td>
 				</tr>

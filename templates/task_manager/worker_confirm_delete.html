@@ -10,6 +10,6 @@
     <form method="post">
         {% csrf_token %}
         <input type="submit" value="Confirm Deletion" class="btn btn-danger">
-        <a href="{% url 'task-manager:workers-list' %}" class="btn btn-secondary">Cancel</a>
+        <a href="{% url 'task-manager:worker-detail' worker.id %}" class="btn btn-secondary">Cancel</a>
     </form>
 {% endblock %}

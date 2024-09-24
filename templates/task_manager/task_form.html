@@ -6,15 +6,30 @@
 
 {% block content %}
   <h1>
-    {{ object|yesno:"Update,Create" }} task
+    {{ object|yesno:"Update,Create" }} Task
   </h1>
+
   <form action="" method="post" novalidate>
     {% csrf_token %}
-		
-		{{ form.as_p }}
+    
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+    
+    {{ form.as_p }}
+
+    {% for field in form %}
+      {% for error in field.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endfor %}
+    {% endfor %}
 
     <input type="submit"
            value="{{ object|yesno:"Update,Create" }}"
            class="btn btn-primary">
   </form>
+
+  <a href="{% url 'task-manager:user-tasks' %}" class="btn btn-secondary">Back to Task List</a>
 {% endblock %}

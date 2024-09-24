@@ -28,8 +28,8 @@
     <p>No tasks assigned.</p>
   {% endif %}
 
-	{% if request.user is worker %}
-		<a href="{% url 'task-manager:worker-update' request.user.id %}">Update Profile</a>
-		<a href="{% url 'task-manager:worker-delete' request.user.id %}">Delete Profile</a>
+	{% if request.user == worker %}
+		<a href="{% url 'task-manager:worker-update' worker.id %}">Update Profile</a>
+		<a href="{% url 'task-manager:worker-delete' worker.id %}">Delete Profile</a>
 	{% endif %}
 {% endblock %}

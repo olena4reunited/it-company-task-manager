@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import SET_NULL
 
 
 class TaskType(models.Model):
@@ -10,6 +9,9 @@ class TaskType(models.Model):
     class Meta:
         ordering = ["name"]
 
+    def __str__(self):
+        return self.name
+
 
 class Position(models.Model):
     name = models.CharField(max_length=63, unique=True)
@@ -17,9 +19,15 @@ class Position(models.Model):
     class Meta:
         ordering = ["name"]
 
+    def __str__(self):
+        return self.name
+
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Task(models.Model):
@@ -41,11 +49,12 @@ class Task(models.Model):
     )
     task_type = models.ForeignKey(
         TaskType,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="tasks"
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=SET_NULL,
+        on_delete=models.SET_NULL,
         null=True
     )
     assignees = models.ManyToManyField(

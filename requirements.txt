@@ -11,3 +11,6 @@ platformdirs==4.3.6
 pycodestyle==2.12.1
 pyflakes==3.2.0
 sqlparse==0.5.1
+
+django-select2~=8.2.1
+django-debug-toolbar~=4.4.6

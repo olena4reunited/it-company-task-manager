@@ -6,11 +6,9 @@
 
 {% block content %}
 	<div class="table-responsive">
-		<div><a href="#">Create Task</a></div>
 		<table class="table table-hover table-bordered">
 			<thead class="table-dark">
 				<tr>
-					<th scope="col">ID</th>
 					<th scope="col">Position</th>
 					<th scope="col">First name</th>
 					<th scope="col">Last name</th>
@@ -20,11 +18,10 @@
 			<tbody>
 				{% for worker in worker_list %}
 				<tr>
-					<td><a href="#">{{ worker.id }}</a></td>
 					<td>{{ worker.position.name }}</td>
 					<td>{{ worker.first_name }}</td>
 					<td>{{ worker.last_name }}</td>
-					<td>{{ worker.username }} {% if user is request.user %}(ME){% endif %}</td>
+					<td><a href="{% url 'task-manager:worker-detail' worker.id %}">{{ worker.username }} {% if worker.username == user.username %}(ME){% endif %}</a></td>
 				</tr>
 				{% empty %}
 				<tr>

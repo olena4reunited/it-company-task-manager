@@ -12,5 +12,5 @@
   
     <button type="submit" class="btn btn-primary">Update</button>
   </form>
-  <a href="{% url 'profile' %}">Cancel</a>
+  <a href="{% url 'task-manager:worker-detail' worker.id %}">Cancel</a>
 {% endblock %}

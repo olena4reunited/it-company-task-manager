@@ -1,37 +1,69 @@
 {% extends "base.html" %}
 
 {% block title %}
-	<title>DevFlow Dashboard</title>
+  <title>Task Manager - Home</title>
 {% endblock %}
 
 {% block content %}
-	<div class="table-responsive">
-		<div><a href="#">Create Task</a></div>
-		<table class="table table-hover table-bordered">
-			<thead class="table-dark">
-				<tr>
-					<th scope="col">Category</th>
-					<th scope="col">Task Name</th>
-					<th scope="col">Assigned To</th>
-					<th scope="col">Priority</th>
-					<th scope="col">Deadline</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for task in tasks %}
-				<tr>
-					<td>{{ task.task_type.name }}</td>
-					<td><a href="{% url 'task-manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
-					<td>{{ task.assignees }}</td>
-					<td>{{ task.priority }}</td>
-					<td>{{ task.deadline|date:"Y-m-d" }}</td>
-				</tr>
-				{% empty %}
-				<tr>
-					<td colspan="5" class="text-center">No tasks available</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to Task Manager</h1>
+    <p class="lead">Organize, track, and complete your tasks efficiently.</p>
+    <hr class="my-4">
+    <p>Get started by creating a new task or viewing your existing tasks.</p>
+    {% if user.is_authenticated %}
+      <a class="btn btn-primary btn-lg" href="{% url 'task-manager:task-create' %}" role="button">Create & Assign Task</a>
+      <a class="btn btn-secondary btn-lg" href="{% url 'task-manager:user-tasks' %}" role="button">View Your Tasks</a>
+    {% else %}
+      <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Warning!</h4>
+        <p>You need to log in to create or view tasks.</p>
+        <hr>
+        <p class="mb-0">Please <a href="{% url 'login' %}" class="alert-link">log in</a> to access your dashboard.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+    <div class="row mt-5">
+      <div class="col-md-4">
+        <h2>Recent Tasks</h2>
+        <ul class="list-group">
+          {% for task in tasks %}
+            <li class="list-group-item">
+              <a href="{% url 'task-manager:task-detail' pk=task.pk %}">{{ task.name }}</a>
+              <span class="badge bg-{% if task.is_completed %}success{% else %}warning{% endif %} float-end">
+                {% if task.is_completed %}Completed{% else %}Pending{% endif %}
+              </span>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No recent tasks</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h2>Task Types</h2>
+        <ul class="list-group">
+          {% for task_type in task_types %}
+            <li class="list-group-item">
+              <a href="{% url 'task-manager:task-type-detail' pk=task_type.pk %}">{{ task_type.name }}</a>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No task types available</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h2>Team Members</h2>
+        <ul class="list-group">
+          {% for user in team_members %}
+            <li class="list-group-item">
+              <a href="{% url 'task-manager:worker-detail' pk=user.pk %}">{{ user.get_full_name|default:user.username }}</a>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No team members available</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
