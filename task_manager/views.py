@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from task_manager.forms import TaskForm, WorkerCreationForm, TaskTypeForm, WorkerUpdateForm
-from task_manager.models import Task, TaskType
+from task_manager.models import Task, TaskType, Worker
 
 User = get_user_model()
 
@@ -108,7 +108,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
-    model = User
+    model = Worker
     form_class = WorkerUpdateForm
     template_name = 'task_manager/worker_update_form.html'
     success_url = reverse_lazy('task-manager:worker-list')
