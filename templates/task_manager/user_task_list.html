@@ -7,9 +7,18 @@
 {% block content %}
 	<div class="container my-4">
 		<h1 class="text-center mb-4">{{ user.first_name }} {{ user.last_name }}'s Task List</h1>
+	
 		<div class="text-end mb-3">
 			<a href="{% url 'task-manager:task-create' %}" class="btn btn-success">Create Task</a>
 		</div>
+		
+		<form method="get" class="mb-4">
+			<div class="input-group">
+				<input type="text" name="task_type_name" class="form-control" placeholder="Search by Task Type" value="{{ task_type_name }}">
+				<button class="btn btn-primary" type="submit">Search</button>
+			</div>
+		</form>
+	
 		<div class="row">
 			{% for task in tasks %}
 				<div class="col-md-4 mb-4">

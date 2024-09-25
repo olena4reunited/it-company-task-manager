@@ -74,7 +74,17 @@ class TaskListView(LoginRequiredMixin, QuerySetOptimizeMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset().prefetch_related('assignees').filter(assignees=self.request.user)
+
+        task_type_name = self.request.GET.get('task_type_name')
+        if task_type_name:
+            queryset = queryset.filter(task_type__name__icontains=task_type_name)
+
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["task_type_name"] = self.request.GET.get('task_type_name', '')
+        return context
 
 
 class WorkersListView(LoginRequiredMixin, generic.ListView):
