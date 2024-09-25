@@ -5,31 +5,46 @@
 {% endblock %}
 
 {% block content %}
-  <h1>
-    {{ object|yesno:"Update,Create" }} Task
-  </h1>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h1 class="h4 card-title text-center mb-4">{{ object|yesno:"Update,Create" }} Task</h1>
 
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
+            <form method="post" novalidate>
+              {% csrf_token %}
 
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger">
-        {{ form.non_field_errors }}
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                  {{ form.non_field_errors }}
+                </div>
+              {% endif %}
+
+              {% for field in form %}
+                <div class="mb-3">
+                  <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in field.errors %}
+                        {{ error }}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                  {{ object|yesno:"Update,Create" }} Task
+                </button>
+                <a href="{% url 'task-manager:user-tasks' %}" class="btn btn-outline-secondary">Back to Task List</a>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    {% endif %}
-
-    {{ form.as_p }}
-
-    {% for field in form %}
-      {% for error in field.errors %}
-        <div class="alert alert-danger">{{ error }}</div>
-      {% endfor %}
-    {% endfor %}
-
-    <input type="submit"
-           value="{{ object|yesno:"Update,Create" }}"
-           class="btn btn-primary">
-  </form>
-
-  <a href="{% url 'task-manager:user-tasks' %}" class="btn btn-secondary">Back to Task List</a>
+    </div>
+  </div>
 {% endblock %}
