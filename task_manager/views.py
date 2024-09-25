@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -17,9 +18,12 @@ class Index(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = Task.objects.select_related('task_type').prefetch_related('assignees')[:10]
+        context['tasks'] = Task.objects.order_by("deadline")[:10]
         context['task_types'] = TaskType.objects.all()[:10]
-        context['team_members'] = User.objects.all()[:10]
+        context['team_members'] = (
+            User.objects.annotate(task_count=Count("tasks"))
+            .order_by("-task_count")[:10]
+        )
         return context
 
 
