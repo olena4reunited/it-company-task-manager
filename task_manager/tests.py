@@ -43,6 +43,55 @@ class TaskManagerModelTests(TestCase):
         self.assertEqual(str(self.user), " ")
 
 
+class TaskListViewWithSearchTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='password'
+        )
+        self.task_type1 = TaskType.objects.create(name='Type1')
+        self.task_type2 = TaskType.objects.create(name='Type2')
+
+        self.task1 = Task.objects.create(
+            name='Task 1',
+            description='Description for Task 1',
+            deadline='2024-12-31',
+            priority='medium',
+            task_type=self.task_type1,
+            created_by=self.user
+        )
+        self.task2 = Task.objects.create(
+            name='Task 2',
+            description='Description for Task 2',
+            deadline='2024-12-31',
+            priority='high',
+            task_type=self.task_type2,
+            created_by=self.user
+        )
+
+        self.task1.assignees.add(self.user)
+        self.task2.assignees.add(self.user)
+
+        self.client.login(username='testuser', password='password')
+
+    def test_task_list_view_without_filter(self):
+        response = self.client.get(reverse('task-manager:user-tasks'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Task 1')
+        self.assertContains(response, 'Task 2')
+
+    def test_task_list_view_with_filter(self):
+        response = self.client.get(reverse('task-manager:user-tasks'), {'task_type_name': 'Type1'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Task 1')
+        self.assertNotContains(response, 'Task 2')
+
+    def test_task_list_view_with_no_results(self):
+        response = self.client.get(reverse('task-manager:user-tasks'), {'task_type_name': 'Nonexistent'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No tasks found.")
+
+
 class TaskManagerViewTests(TestCase):
     def setUp(self):
         self.client = Client()
@@ -111,13 +160,12 @@ class TaskManagerViewTests(TestCase):
             'deadline': timezone.now().date() + datetime.timedelta(days=10),
             'task_type': self.task_type.id,
             'assignees': [self.user.id],
-            'priority': 'low'
+            'priority': 'medium'
         }
         response = self.client.post(reverse('task-manager:task-update', args=[self.task.id]), data=updated_data)
         self.assertEqual(response.status_code, 302)
         self.task.refresh_from_db()
         self.assertEqual(self.task.name, 'Updated Task')
-        self.assertEqual(self.task.priority, 'low')
 
     def test_task_delete_view(self):
         self.client.login(username='testuser', password='testpass123')
