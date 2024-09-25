@@ -36,7 +36,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('task-manager:task-detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('task-manager:user-tasks')
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -58,6 +58,10 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
     success_url = reverse_lazy("task-manager:user-tasks")
+
+    def form_valid(self, form):
+        task = form.save(user=self.request.user)
+        return super().form_valid(form)
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):

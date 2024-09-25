@@ -34,6 +34,9 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields["priority"].initial = self.instance.priority
+
         for field_name, field in self.fields.items():
             if field.widget.attrs.get("class"):
                 field.widget.attrs["class"] = "bform-control form-control-lg"
