@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.template.defaultfilters import first
 from django.utils import timezone
 from django_select2.forms import Select2MultipleWidget
 
@@ -19,11 +18,19 @@ class TaskForm(forms.ModelForm):
         fields = ["name", "description", "deadline", "task_type", "assignees"]
         widgets = {
             "name": forms.TextInput(attrs={"placeholder": "Title"}),
-            "description": forms.Textarea(attrs={"placeholder": "Description"}),
+            "description": (
+                forms.Textarea(
+                    attrs={"placeholder": "Description"}
+                )
+            ),
             "deadline": forms.DateInput(
                 attrs={"type": "date", "title": "Deadline"}
             ),
-            "assignees": Select2MultipleWidget(attrs={"class": "form-control form-control-lg"}),
+            "assignees": (
+                Select2MultipleWidget(
+                    attrs={"class": "form-control form-control-lg"}
+                )
+            ),
         }
 
     def clean_deadline(self):
@@ -41,14 +48,15 @@ class TaskForm(forms.ModelForm):
             if field.widget.attrs.get("class"):
                 field.widget.attrs["class"] = "bform-control form-control-lg"
             else:
-                field.widget.attrs.update({"class": "form-control form-control-lg"})
+                field.widget.attrs.update(
+                    {"class": "form-control form-control-lg"}
+                )
 
             if field_name in ("priority", "task_type"):
                 field.widget.attrs["class"] += " form-select"
 
             if self.errors.get(field_name):
                 field.widget.attrs["class"] += " is-invalid"
-
 
     def save(self, commit=True, user=None):
         task = super().save(commit=False)
@@ -63,16 +71,24 @@ class TaskForm(forms.ModelForm):
 class WorkerCreationForm(UserCreationForm):
     class Meta:
         model = Worker
-        fields = ['username', 'first_name', 'last_name', 'email', 'position', 'password1', 'password2']
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "position",
+            "password1",
+            "password2"
+        ]
 
 
 class WorkerUpdateForm(UserChangeForm):
     class Meta:
         model = Worker
-        fields = ['username', 'first_name', 'last_name', 'email', 'position']
+        fields = ["username", "first_name", "last_name", "email", "position"]
 
 
 class TaskTypeForm(forms.ModelForm):
     class Meta:
         model = TaskType
-        fields = ['name']
+        fields = ["name"]

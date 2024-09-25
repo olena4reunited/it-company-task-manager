@@ -6,7 +6,12 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from task_manager.forms import TaskForm, WorkerCreationForm, TaskTypeForm, WorkerUpdateForm
+from task_manager.forms import (
+    TaskForm,
+    WorkerCreationForm,
+    TaskTypeForm,
+    WorkerUpdateForm
+)
 from task_manager.models import Task, TaskType, Worker
 from task_manager.mixins import QuerySetOptimizeMixin
 
@@ -22,7 +27,7 @@ class Index(generic.TemplateView):
         context['task_types'] = TaskType.objects.all()[:10]
         context['team_members'] = (
             User.objects.annotate(task_count=Count("tasks"))
-            .order_by("-task_count")[:10]
+            .order_by("-task_count")
         )
         return context
 
@@ -45,12 +50,15 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if request.user in self.object.assignees.all() and not self.object.is_completed:
+        if request.user in self.object.assignees.all():
             self.object.is_completed = True
             self.object.save()
             return redirect('task-manager:task-detail', pk=self.object.pk)
         else:
-            messages.error(request, "You don't have permission to complete this task.")
+            messages.error(
+                request,
+                "You don't have permission to complete this task."
+            )
             return redirect('task-manager:task-detail', pk=self.object.pk)
 
 
@@ -60,7 +68,10 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy("task-manager:user-tasks")
 
     def form_valid(self, form):
-        task = form.save(user=self.request.user)
+        task = form.save(commit=False)
+        task.created_by = self.request.user
+        task.save()
+        form.save_m2m()
         return super().form_valid(form)
 
 
@@ -69,7 +80,11 @@ class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task-manager:user-tasks")
 
 
-class TaskListView(LoginRequiredMixin, QuerySetOptimizeMixin, generic.ListView):
+class TaskListView(
+    LoginRequiredMixin,
+    QuerySetOptimizeMixin,
+    generic.ListView
+):
     model = Task
     template_name = "task_manager/user_task_list.html"
     context_object_name = 'tasks'
@@ -77,11 +92,17 @@ class TaskListView(LoginRequiredMixin, QuerySetOptimizeMixin, generic.ListView):
     prefetch_related_fields = ['assignees']
 
     def get_queryset(self):
-        queryset = super().get_queryset().prefetch_related('assignees').filter(assignees=self.request.user)
+        queryset = (
+            super().get_queryset()
+            .prefetch_related('assignees')
+            .filter(assignees=self.request.user)
+        )
 
         task_type_name = self.request.GET.get('task_type_name')
         if task_type_name:
-            queryset = queryset.filter(task_type__name__icontains=task_type_name)
+            queryset = (
+                queryset.filter(task_type__name__icontains=task_type_name)
+            )
 
         return queryset
 
@@ -100,20 +121,31 @@ class WorkersListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return User.objects.select_related("position").all()
 
-class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+
+class WorkerCreateView(
+    LoginRequiredMixin,
+    generic.CreateView
+):
     form_class = WorkerCreationForm
     template_name = 'task_manager/worker_form.html'
     success_url = reverse_lazy('login')
 
 
-class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+class WorkerUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.UpdateView
+):
     model = Worker
     form_class = WorkerUpdateForm
     template_name = 'task_manager/worker_update_form.html'
     success_url = reverse_lazy('task-manager:worker-list')
 
     def test_func(self):
-        return self.request.user.is_staff or self.request.user == self.get_object()
+        return (
+            self.request.user.is_staff
+            or self.request.user == self.get_object()
+        )
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
@@ -123,11 +155,19 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = Task.objects.prefetch_related('assignees').filter(assignees=self.object)
+        context['tasks'] = (
+            Task.objects
+            .prefetch_related('assignees')
+            .filter(assignees=self.object)
+        )
         return context
 
 
-class WorkerDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+class WorkerDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.DeleteView
+):
     model = User
     template_name = 'task_manager/worker_confirm_delete.html'
     success_url = reverse_lazy('task-manager:workers-list')
