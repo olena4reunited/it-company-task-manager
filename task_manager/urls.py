@@ -15,7 +15,8 @@ from task_manager.views import (
     TaskTypeListView,
     TaskTypeDetailView,
     TaskTypeUpdateView,
-    TaskTypeDeleteView
+    TaskTypeDeleteView,
+    logout_confirmation
 )
 
 urlpatterns = [
@@ -34,6 +35,7 @@ urlpatterns = [
     path("tasktypes/<int:pk>/", TaskTypeDetailView.as_view(), name="task-type-detail"),
     path("tasktypes/<int:pk>/update/", TaskTypeUpdateView.as_view(), name="task-type-update"),
     path("tasktypes/<int:pk>/delete/", TaskTypeDeleteView.as_view(), name="task-type-delete"),
+    path('logout/', logout_confirmation, name='logout-confirmation'),
 ]
 
 app_name = "task-manager"

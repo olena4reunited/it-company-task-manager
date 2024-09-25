@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -160,3 +160,7 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = 'task_manager/tasktype_confirm_delete.html'
     context_object_name = 'task_type'
     success_url = reverse_lazy('task-manager:task-type-list')
+
+
+def logout_confirmation(request):
+    return render(request, 'registration/logout_confirmation.html')
