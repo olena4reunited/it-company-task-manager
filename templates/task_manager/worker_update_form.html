@@ -24,18 +24,20 @@
             {% endif %}
             
             {% for field in form %}
-            <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-              {{ field|add_class:"form-control" }}
-              {% if field.errors %}
-                <div class="invalid-feedback d-block">
-                  {% for error in field.errors %}
-                    {{ error }}<br>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-            {% endfor %}
+							{% if "password" not in field.name%}
+								<div class="mb-3">
+									<label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+									{{ field|add_class:"form-control" }}
+									{% if field.errors %}
+										<div class="invalid-feedback d-block">
+											{% for error in field.errors %}
+												{{ error }}<br>
+											{% endfor %}
+										</div>
+									{% endif %}
+								</div>
+							{% endif %}
+              {% endfor %}
 
             <div class="d-grid">
               <button type="submit" class="btn btn-primary">
