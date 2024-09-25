@@ -27,7 +27,7 @@ class Index(generic.TemplateView):
         context['task_types'] = TaskType.objects.all()[:10]
         context['team_members'] = (
             User.objects.annotate(task_count=Count("tasks"))
-            .order_by("-task_count")
+            .order_by("-task_count")[:10]
         )
         return context
 
