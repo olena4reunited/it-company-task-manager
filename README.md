@@ -9,6 +9,11 @@
 
 [IT Company Task Manager](https://it-company-task-manager-l8ty.onrender.com)
 
+```
+    user: admin
+    password: ojv03YEyW
+```
+
 ## Installation
 
 ```shell
@@ -70,6 +75,14 @@
 
     Dashboard showing recent tasks and team activity.
     Reports on task completion and team workload.
+
+---
+
+![db-diagram](DBMS.png)
+
+---
+
+![home-page](home-page.jpg)
 
 ---
 
