@@ -23,9 +23,9 @@ class Index(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = Task.objects.order_by("deadline")[:10]
-        context['task_types'] = TaskType.objects.all()[:10]
-        context['team_members'] = (
+        context["tasks"] = Task.objects.order_by("deadline")[:10]
+        context["task_types"] = TaskType.objects.all()[:10]
+        context["team_members"] = (
             User.objects.annotate(task_count=Count("tasks"))
             .order_by("-task_count")[:10]
         )
@@ -41,25 +41,25 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('task-manager:user-tasks')
+        return reverse_lazy("task-manager:user-tasks")
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
-    select_related_fields = ['assignees', 'task_type', 'created_by']
+    select_related_fields = ["assignees", "task_type", "created_by"]
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if request.user in self.object.assignees.all():
             self.object.is_completed = True
             self.object.save()
-            return redirect('task-manager:task-detail', pk=self.object.pk)
+            return redirect("task-manager:task-detail", pk=self.object.pk)
         else:
             messages.error(
                 request,
                 "You don't have permission to complete this task."
             )
-            return redirect('task-manager:task-detail', pk=self.object.pk)
+            return redirect("task-manager:task-detail", pk=self.object.pk)
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -87,18 +87,18 @@ class TaskListView(
 ):
     model = Task
     template_name = "task_manager/user_task_list.html"
-    context_object_name = 'tasks'
-    select_related_fields = ['task_type', 'created_by']
-    prefetch_related_fields = ['assignees']
+    context_object_name = "tasks"
+    select_related_fields = ["task_type", "created_by"]
+    prefetch_related_fields = ["assignees"]
 
     def get_queryset(self):
         queryset = (
             super().get_queryset()
-            .prefetch_related('assignees')
+            .prefetch_related("assignees")
             .filter(assignees=self.request.user)
         )
 
-        task_type_name = self.request.GET.get('task_type_name')
+        task_type_name = self.request.GET.get("task_type_name")
         if task_type_name:
             queryset = (
                 queryset.filter(task_type__name__icontains=task_type_name)
@@ -108,7 +108,7 @@ class TaskListView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["task_type_name"] = self.request.GET.get('task_type_name', '')
+        context["task_type_name"] = self.request.GET.get("task_type_name", "")
         return context
 
 
@@ -127,8 +127,8 @@ class WorkerCreateView(
     generic.CreateView
 ):
     form_class = WorkerCreationForm
-    template_name = 'task_manager/worker_form.html'
-    success_url = reverse_lazy('login')
+    template_name = "task_manager/worker_form.html"
+    success_url = reverse_lazy("login")
 
 
 class WorkerUpdateView(
@@ -138,26 +138,20 @@ class WorkerUpdateView(
 ):
     model = Worker
     form_class = WorkerUpdateForm
-    template_name = 'task_manager/worker_update_form.html'
-    success_url = reverse_lazy('task-manager:worker-list')
-
-    def test_func(self):
-        return (
-            self.request.user.is_staff
-            or self.request.user == self.get_object()
-        )
+    template_name = "task_manager/worker_update_form.html"
+    success_url = reverse_lazy("task-manager:worker-list")
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = User
-    template_name = 'task_manager/worker_detail.html'
-    context_object_name = 'worker'
+    template_name = "task_manager/worker_detail.html"
+    context_object_name = "worker"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = (
+        context["tasks"] = (
             Task.objects
-            .prefetch_related('assignees')
+            .prefetch_related("assignees")
             .filter(assignees=self.object)
         )
         return context
@@ -169,8 +163,8 @@ class WorkerDeleteView(
     generic.DeleteView
 ):
     model = User
-    template_name = 'task_manager/worker_confirm_delete.html'
-    success_url = reverse_lazy('task-manager:workers-list')
+    template_name = "task_manager/worker_confirm_delete.html"
+    success_url = reverse_lazy("task-manager:workers-list")
 
     def test_func(self):
         return self.request.user.is_staff
@@ -178,33 +172,33 @@ class WorkerDeleteView(
 
 class TaskTypeListView(generic.ListView):
     model = TaskType
-    template_name = 'task_manager/tasktype_list.html'
-    context_object_name = 'task_type_list'
+    template_name = "task_manager/tasktype_list.html"
+    context_object_name = "task_type_list"
 
 
 class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):
     model = TaskType
-    template_name = 'task_manager/tasktype_detail.html'
-    context_object_name = 'task_type'
+    template_name = "task_manager/tasktype_detail.html"
+    context_object_name = "task_type"
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related('tasks')
+        return super().get_queryset().prefetch_related("tasks")
 
 
 class TaskTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = TaskType
     form_class = TaskTypeForm
-    template_name = 'task_manager/tasktype_update.html'
-    context_object_name = 'task_type'
-    success_url = reverse_lazy('task-manager:task-type-list')
+    template_name = "task_manager/tasktype_update.html"
+    context_object_name = "task_type"
+    success_url = reverse_lazy("task-manager:task-type-list")
 
 
 class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = TaskType
-    template_name = 'task_manager/tasktype_confirm_delete.html'
-    context_object_name = 'task_type'
-    success_url = reverse_lazy('task-manager:task-type-list')
+    template_name = "task_manager/tasktype_confirm_delete.html"
+    context_object_name = "task_type"
+    success_url = reverse_lazy("task-manager:task-type-list")
 
 
 def logout_confirmation(request):
-    return render(request, 'registration/logout_confirmation.html')
+    return render(request, "registration/logout_confirmation.html")
