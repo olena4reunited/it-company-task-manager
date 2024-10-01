@@ -14,9 +14,7 @@
           <thead>
             <tr class="table-light">
               <th scope="col">Name</th>
-							{% if request.user.is_staff %}
-              <th scope="col" class="text-end">Actions</th>
-							{% endif %}
+							{% if request.user.is_staff %}<th scope="col" class="text-end">Actions</th>{% endif %}
             </tr>
           </thead>
           <tbody>
@@ -28,10 +26,10 @@
                 </a>
               </td>
 							{% if request.user.is_staff %}
-              <td class="text-end">
-                <a href="{% url 'task-manager:task-type-update' task_type.id %}" class="btn btn-outline-primary btn-sm me-2">Update</a>
-                <a href="{% url 'task-manager:task-type-delete' task_type.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-              </td>
+								<td class="text-end">
+									<a href="{% url 'task-manager:task-type-update' task_type.id %}" class="btn btn-outline-primary btn-sm me-2">Update</a>
+									<a href="{% url 'task-manager:task-type-delete' task_type.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+								</td>
 							{% endif %}
             </tr>
             {% empty %}
