@@ -14,29 +14,33 @@
           <thead>
             <tr class="table-light">
               <th scope="col">Name</th>
-						{% if request.user.is_staff %}<th scope="col" class="text-end">Actions</th>{% endif %}
+              {% if request.user.is_staff %}
+                <th scope="col" class="text-end">Actions</th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
-            {% for task_type in task_type_list %}
-            <tr>
-              <td>
-                <a href="{% url 'task-manager:task-type-detail' task_type.id %}" class="text-decoration-none">
-                  {{ task_type.name }}
-                </a>
-              </td>
-						{% if request.user.is_staff %}
-							<td class="text-end">
-								<a href="{% url 'task-manager:task-type-update' task_type.id %}" class="btn btn-outline-primary btn-sm me-2">Update</a>
-								<a href="{% url 'task-manager:task-type-delete' task_type.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-							</td>
-						{% endif %}
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="2" class="text-center text-muted">No task types available.</td>
-            </tr>
-            {% endfor %}
+            {% if task_type_list %}
+              {% for task_type in task_type_list %}
+                <tr>
+                  <td>
+                    <a href="{% url 'task-manager:task-type-detail' task_type.id %}" class="text-decoration-none">
+                      {{ task_type.name }}
+                    </a>
+                  </td>
+                  {% if request.user.is_staff %}
+                    <td class="text-end">
+                      <a href="{% url 'task-manager:task-type-update' task_type.id %}" class="btn btn-outline-primary btn-sm me-2">Update</a>
+                      <a href="{% url 'task-manager:task-type-delete' task_type.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="{% if request.user.is_staff %}2{% else %}1{% endif %}" class="text-center text-muted">No task types available.</td>
+              </tr>
+            {% endif %}
           </tbody>
         </table>
       </div>
