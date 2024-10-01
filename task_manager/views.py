@@ -166,9 +166,6 @@ class WorkerDeleteView(
     template_name = "task_manager/worker_confirm_delete.html"
     success_url = reverse_lazy("task-manager:workers-list")
 
-    def test_func(self):
-        return self.request.user.is_staff
-
 
 class TaskTypeListView(generic.ListView):
     model = TaskType
