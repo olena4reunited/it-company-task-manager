@@ -141,6 +141,11 @@ class WorkerUpdateView(
     template_name = "task_manager/worker_update_form.html"
     success_url = reverse_lazy("task-manager:worker-list")
 
+    def test_func(self):
+        worker = self.get_object()
+        # Check if the current user is the worker being updated or is a superuser
+        return self.request.user == worker or self.request.user.is_superuser
+
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = User
@@ -165,6 +170,11 @@ class WorkerDeleteView(
     model = User
     template_name = "task_manager/worker_confirm_delete.html"
     success_url = reverse_lazy("task-manager:workers-list")
+
+    def test_func(self):
+        worker = self.get_object()
+        # Check if the current user is the worker being updated or is a superuser
+        return self.request.user == worker or self.request.user.is_superuser
 
 
 class TaskTypeListView(generic.ListView):
