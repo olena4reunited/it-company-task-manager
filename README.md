@@ -1,9 +1,9 @@
 # IT Company Task Manager
 
-    The IT Company Task Manager is a user-friendly web application
-    designed to streamline project management. This tool allows IT teams
-    to efficiently create, assign, and track tasks,
-    ensuring that projects are completed on time and within scope.
+The IT Company Task Manager is a user-friendly web application
+designed to streamline project management. This tool allows IT teams
+to efficiently create, assign, and track tasks, 
+ensuring that projects are completed on time and within scope.
 
 ## Deployed project
 
@@ -85,7 +85,7 @@
 ![home-page](home-page.jpg)
 
 ---
-
-    Project homepage: https://it-company-task-manager-l8ty.onrender.com/
-    Repository: https://github.com/olena4reunited/it-company-task-manager
-    Issue tracker: https://github.com/olena4reunited/it-company-task-manager/issues
+    
+Project homepage: https://it-company-task-manager-l8ty.onrender.com/
+Repository: https://github.com/olena4reunited/it-company-task-manager
+Issue tracker: https://github.com/olena4reunited/it-company-task-manager/issues
