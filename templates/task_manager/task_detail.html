@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>{{ task.task_type.name }}: {{ task.name }} </title>
+{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">{{ task.name }}</h3>
+          <div>
+            {% if request.user == task.created_by %}
+              <a href="{% url 'task-manager:task-update' pk=task.id %}" class="btn btn-primary btn-sm me-2">Update</a>
+              <a href="{% url 'task-manager:task-delete' pk=task.id %}" class="btn btn-danger btn-sm">Delete</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="text-danger font-weight-bold">{{ task.deadline }}</div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">{{ task.task_type.name }}</h4>
+        <p class="card-text">{{ task.description }}</p>
+        {% if not task.is_completed and request.user in task.assignees.all %}
+          <form method="post" action="{% url 'task-manager:task-detail' pk=task.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Mark as Done</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

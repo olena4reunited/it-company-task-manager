@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>{{ task_type }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h1 class="h5 mb-4">Task Type Details</h1>
+      <h2 class="h6 mb-4">{{ task_type }}</h2>
+
+      <h3 class="h6 mb-3">Related Tasks</h3>
+      {% if task_type.tasks %}
+        {% for task in task_type.tasks.all %}
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="card-title mb-1">{{ task.name }}</h5>
+                <p class="card-text mb-2">{{ task.description }}</p>
+                <p class="card-text text-muted">Deadline: {{ task.deadline }}</p>
+              </div>
+              <span class="badge bg-{% if task.is_completed %}success{% else %}danger{% endif %} rounded-pill">
+                {% if task.is_completed %}Completed{% else %}Not Completed{% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted">No tasks of this category.</p>
+      {% endif %}
+
+      <div class="mt-4">
+        <a href="{% url 'task-manager:task-type-list' %}" class="btn btn-outline-primary">Back to Task Type List</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

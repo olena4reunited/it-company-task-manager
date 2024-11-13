@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Colleagues</title>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h1 class="h5 mb-4">Colleagues</h1>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr class="table-light">
+              <th scope="col">Position</th>
+              <th scope="col">First name</th>
+              <th scope="col">Last name</th>
+              <th scope="col">Username</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for worker in worker_list %}
+            <tr>
+              <td>{{ worker.position.name }}</td>
+              <td>{{ worker.first_name }}</td>
+              <td>{{ worker.last_name }}</td>
+              <td>
+                <a href="{% url 'task-manager:worker-detail' worker.id %}" class="text-decoration-none">
+                  {{ worker.username }}
+                  {% if worker.username == user.username %}(ME){% endif %}
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted">Nobody is working anymore</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
