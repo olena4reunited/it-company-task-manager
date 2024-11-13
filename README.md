@@ -87,7 +87,3 @@ ensuring that projects are completed on time and within scope.
 ---
     
 Project homepage: https://it-company-task-manager-l8ty.onrender.com/
-
-Repository: https://github.com/olena4reunited/it-company-task-manager
-
-Issue tracker: https://github.com/olena4reunited/it-company-task-manager/issues
